@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+<!-- 配置连接池 -->
+<!-- 引入外部属性文件 -->
+<context:property-placeholder location="classpath:jdbc.properties"/>
+<!-- 配置c3p0连接池 -->
+<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<property name="driverClass" value="${jdbc.driver}"/>
+	<property name="jdbcUrl" value="${jdbc.url}"/>
+	<property name="user" value="${jdbc.user}"/>
+	<property name="password" value="${jdbc.password}"/>
+	<property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>  
+    <!-- 指定连接池中保留的最小连接数-->  
+    <property name="minPoolSize" value="${jdbc.minPoolSize}"/>  
+    <!-- 指定连接池的初始化连接数  取值应在minPoolSize 与 maxPoolSize 之间.Default:3-->  
+    <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>  
+    <!-- 最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。 Default:0-->  
+    <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>  
+  	<!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数. Default:3-->  
+ 	<property name="acquireIncrement" value="${jdbc.acquireIncrement}"/>  
+    <!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->  
+    <property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/>  
+</bean>
+<!-- Hibernate的相关信息 -->
+<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+	<!-- 注入连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 配置Hibernate的其他的属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="jdbc.fetch_size">50 </prop>   
+				<prop key="hibernate.dbcp.maxActive">100 </prop>    
+			    <prop key="hibernate.dbcp.whenExhaustedAction">1 </prop>    
+			    <prop key="hibernate.dbcp.maxWait">1200 </prop>    
+			    <prop key="hibernate.dbcp.maxIdle">10 </prop>  
+			    <prop key="hibernate.search.default.directory_provider">filesystem </prop>
+            	<prop key="hibernate.search.default.indexBase">E:\index</prop>  
+			</props>
+		</property>
+	
+	<property name="mappingResources">
+		<list>
+			<value>cn/itcast/shop/user/domain/User.hbm.xml</value>
+			<value>cn/itcast/shop/user/domain/Address.hbm.xml</value>
+			<value>cn/itcast/shop/user/domain/Favorites.hbm.xml</value>
+			<value>cn/itcast/shop/category/domain/Category.hbm.xml</value>
+			<value>cn/itcast/shop/categorysecond/domian/CategorySecond.hbm.xml</value>
+			<value>cn/itcast/shop/categorythird/domain/CategoryThird.hbm.xml</value>
+			<value>cn/itcast/shop/product/domain/Product.hbm.xml</value>
+			<value>cn/itcast/shop/order/domain/Order.hbm.xml</value>
+			<value>cn/itcast/shop/order/domain/OrderItem.hbm.xml</value> 
+			<value>cn/itcast/shop/order/domain/Comment.hbm.xml</value>
+			<value>cn/itcast/shop/adminuser/domain/AdminUser.hbm.xml</value>
+		</list>
+	</property>
+</bean>
+<!-- 事务管理 -->
+<!-- 事务管理器 -->
+ <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	<property name="sessionFactory" ref="sessionFactory"/>
+</bean> 
+<!-- 开启注解事务 -->
+<tx:annotation-driven transaction-manager="transactionManager"/>
+<!-- Action的配置========================================= -->
+
+<!-- 开启首页的Action -->
+<bean id="indexAction" class="cn.itcast.index.action.IndexAction" scope="prototype">
+	<property name="productService" ref="productService"/>
+	<property name="saveSessionTool" ref="saveSessionTool"/>
+</bean>
+<!-- 配置验证码Action -->
+<bean id="checkImgAction" class="cn.itcast.shop.user.action.CheckImgAction">
+</bean>
+<!-- 用户模块的Action -->
+<bean id="userAction" class="cn.itcast.shop.user.action.UserAction" scope="prototype">
+	<property name="userService" ref="userService"/>
+	<property name="saveSessionTool" ref="saveSessionTool"/>
+
+</bean>
+<!-- category模块 -->
+<bean id="categoryAction" class="cn.itcast.shop.category.action.CategoryAction" scope="prototype">
+	<property name="categoryService" ref="categoryService"/>
+</bean>
+
+<!-- product模块 -->
+<bean id="productAction" class="cn.itcast.shop.product.action.ProductAction" scope="prototype">
+	<property name="productService" ref="productService"/>
+	<property name="categorySecondService" ref="categorySecondService"/>
+	<property name="saveSessionTool" ref="saveSessionTool"/>
+	<property name="categoryThirdService" ref="categoryThirdService"/>
+	<property name="categoryService" ref="categoryService"/>
+	<property name="favoritesService" ref="favoritesService"/>
+</bean>
+<!-- cart购物车模块action -->
+<bean id="cartAction" class="cn.itcast.shop.cart.action.CartAction" scope="prototype">
+	<property name="productService" ref="productService"/>
+</bean>
+<!-- 订单模块action -->
+<bean id="orderAction" class="cn.itcast.shop.order.action.OrderAction" scope="prototype">
+	<property name="orderService" ref="orderService"/>
+	<property name="productService" ref="productService"/>
+	<property name="addressService" ref="addressService"/>
+	<property name="commentService" ref="commentService"/>
+</bean>
+<!-- 管理员模块action -->
+<bean id="adminUserAction" class="cn.itcast.shop.adminuser.action.AdminUserAction" scope="prototype">
+	<property name="adminUserService" ref ="adminUserService"/>
+</bean>
+<!-- 后台用户管理 -->
+<bean id="UserAdminAction" class="cn.itcast.shop.user.adminaction.UserAdminAction" scope="prototype">
+	<property name="userService" ref="userService"/>
+</bean>
+<!-- 后台一级分类管理 -->
+<bean id="AdminCategoryAction" class="cn.itcast.shop.category.adminAction.AdminCategoryAction" scope="prototype">
+	<property name="categoryService" ref="categoryService"/>
+</bean>
+<!-- 后台二级分类管理 -->
+<bean id="AdminCSAction" class="cn.itcast.shop.categorysecond.adminCategorySecondAction.AdminCSAction">
+	<property name="categorySecondService" ref="categorySecondService"/>
+	<property name="categoryService" ref="categoryService"/>
+</bean>
+<!-- 后台三级分类管理 -->
+<bean id="categoryThirdAction" class="cn.itcast.shop.categorythird.action.CategoryThirdAction">
+	<property name="categoryThirdService" ref="categoryThirdService" />
+	<property name="categorySecondService" ref="categorySecondService" />
+</bean>
+<!-- 商品管理 -->
+<bean id="AdminProduct" class="cn.itcast.shop.product.adminAction.AdminProductAction" scope="prototype">
+	<property name="productService" ref="productService"/>
+	<property name="categoryThirdService" ref="categoryThirdService"/>
+	<property name="categorySecondService" ref="categorySecondService" />
+</bean>
+
+<!-- 后台订单管理 -->
+<bean id="AdminOrder" class="cn.itcast.shop.order.adminOrderAction.AdminOrderAction">
+	<property name="orderService" ref="orderService"/>
+</bean>
+
+<!-- 工具类action -->
+<bean id="saveSessionTool" class="cn.itcast.shop.utils.SaveSessionTool">  
+		<property name="categoryService" ref="categoryService"/>
+</bean>
+<!-- 收藏夹action -->
+<bean id="favoritesAction" class="cn.itcast.shop.user.action.FavoritesAction">
+	<property name="favoritesService" ref="favoritesService"/>
+	<property name="productService" ref="productService"/>
+</bean>
+<bean id="portraitAction" class="cn.itcast.shop.user.action.PortraitAction">
+	<property name="userService" ref="userService"/>
+</bean>
+<bean id="addressAction" class="cn.itcast.shop.user.action.AddressAction">
+	<property name="addressService" ref="addressService"/>
+</bean>
+<!-- Service的配置 ==============================================================-->
+<bean id="userService" class="cn.itcast.shop.user.service.UserService">
+	<property name="userDao" ref="userDao"/>
+</bean>
+<bean id="categoryService" class="cn.itcast.shop.category.service.CategoryService">
+	<property name="categoryDao" ref="categoryDao"/>
+</bean>
+ 
+<bean id="categorySecondService" class="cn.itcast.shop.categorysecond.service.CategorySecondService">
+	<property name="categorySecondDao" ref="categorySecondDao"/>
+</bean>
+
+<bean id="productService" class="cn.itcast.shop.product.service.ProductService">
+	<property name="productDao" ref="productDao"/>
+	<property name="sessionFactory" ref = "sessionFactory"/>
+</bean>
+<bean id="orderService" class="cn.itcast.shop.order.service.OrderService">
+	<property name="orderDao" ref="orderDao"/>
+</bean>
+<bean id="commentService" class="cn.itcast.shop.order.service.CommentService">
+	<property name="commentDao" ref="commentDao"/>
+</bean>
+<bean id="adminUserService" class="cn.itcast.shop.adminuser.service.AdminUserService">
+	<property name="adminUserDao" ref="adminUserDao"/>
+</bean>
+<!-- categoryThirdService配置 -->
+<bean id="categoryThirdService" class="cn.itcast.shop.categorythird.service.CategoryThirdService">
+	<property name="categoryThirdDao" ref="categoryThirdDao"/>
+</bean>
+<bean id="addressService" class="cn.itcast.shop.user.service.AddressService">
+	<property name="addressDao" ref="addressDao"/>
+</bean>
+<!-- 收藏夹service -->
+<bean id="favoritesService" class="cn.itcast.shop.user.service.FavoritesService">
+<property name="favoritesDao" ref="favoritesDao"/>
+</bean>
+<!-- Dao的配置=========================================================================== -->
+<bean id="userDao" class="cn.itcast.shop.user.dao.UserDao">
+	<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+ 
+<bean id="categoryDao" class="cn.itcast.shop.category.dao.CategoryDao">
+	 <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id="categorySecondDao" class="cn.itcast.shop.categorysecond.dao.CategorySecondDao">
+	<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id="productDao" class="cn.itcast.shop.product.dao.ProductDao">
+	<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+<bean id="orderDao" class="cn.itcast.shop.order.dao.OrderDao">
+	<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id="commentDao" class="cn.itcast.shop.order.dao.CommentDao">
+	<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+<bean id="adminUserDao" class = "cn.itcast.shop.adminuser.dao.AdminUserDao">
+	<property name="sessionFactory" ref = "sessionFactory"/>
+</bean>
+<!-- categoryThirdDao配置 -->
+<bean id = "categoryThirdDao" class="cn.itcast.shop.categorythird.dao.CategoryThirdDao">
+	<property name="sessionFactory" ref = "sessionFactory"/>
+</bean>
+<bean id="addressDao" class="cn.itcast.shop.user.dao.AddressDao">
+	<property name="sessionFactory" ref = "sessionFactory"/>
+</bean>
+<!-- 收藏类的dao -->
+<bean id="favoritesDao" class="cn.itcast.shop.user.dao.FavoritesDao">
+<property name="sessionFactory" ref = "sessionFactory"/>
+</bean>
+<!-- 测试用的类 -->
+<!-- <bean id="HibernateTest" class="cn.itcast.utils.HibernateTest">
+	<property name="userService" ref="userService"/>
+	<property name="categoryService" ref="categoryService"/>
+	<property name="categorySecondService" ref="categorySecondService"/>
+	<property name="categoryThirdService" ref="categoryThirdService"/>
+</bean>  -->
+<bean id="ActionTest" class="cn.itcast.utils.ActionTest">
+	<property name="categoryService" ref="categoryService"/>
+	<property name="categorySecondService" ref="categorySecondService"/>
+	<property name="categoryThirdService" ref="categoryThirdService"/>
+	<property name="productService" ref="productService"/>
+	<property name="sessionFactory" ref = "sessionFactory"/>
+</bean>
+</beans>

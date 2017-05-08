@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ <hibernate-mapping>
+ 	<class name="cn.itcast.shop.categorysecond.domian.CategorySecond" table="categorysecond">
+ 		<id name="csid">
+ 			<generator class="native"></generator>
+ 		</id>
+ 	<property name="csname"/>
+ 	<!-- 多个二级菜单对应一个一级菜单 -->
+ 	<many-to-one name="category" lazy="false" class="cn.itcast.shop.category.domain.Category" column="cid" />
+	<!-- 一个二级菜单有多个三级菜单 -->
+	<set order-by="ctid" name="categoryThird" lazy="true" cascade="delete">
+ 		<key column="csid"/>
+ 		<one-to-many class="cn.itcast.shop.categorythird.domain.CategoryThird" />
+ 	</set> 
+ 	</class>
+ </hibernate-mapping>

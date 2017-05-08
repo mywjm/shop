@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	 <!-- 设置浏览器是否缓存静态内容,默认值为true(生产环境下使用),开发阶段最好关闭 -->  
+	<constant name="struts.serve.static.browserCache" value="false" />  
+	 <!-- 当struts的配置文件修改后,系统是否自动重新加载该文件,默认值为false(生产环境下使用),开发阶段最好打开 -->  
+	 <constant name="struts.configuration.xml.reload" value="true" />
+	<package name="ssh" extends="struts-default" namespace="/">
+<!-- 		<interceptors>
+            <interceptor  name="urlinterceptor"  class="cn.itcast.shop.utils.UrlFilter"/>
+            <interceptor-stack name="teamwareStack">
+                <interceptor-ref name="urlinterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="teamwareStack"/>-->
+		<global-results> 
+			<result name="msg">/WEB-INF/jsp/msg.jsp</result>
+		</global-results>
+		<!-- 首页action -->
+		<action name="index" class="indexAction" method="index">
+			<result name="index">/WEB-INF/jsp/index.jsp</result>
+		</action>
+		<action name="index_*" class="indexAction" method="{1}">
+			<result name="guidance">/WEB-INF/jsp/guidance.jsp</result>
+			<result name="returnGood">/WEB-INF/jsp/returngood.jsp</result>
+			<result name="advice">/WEB-INF/jsp/advice.jsp</result>
+			<result name="aboutus">/WEB-INF/jsp/aboutQtao.jsp</result>
+			<result name="fourzfour">/WEB-INF/jsp/404.jsp</result>
+			<result name="more">/WEB-INF/jsp/more.jsp</result>
+		</action>
+		<!-- 测试网页跳转 -->
+		<action name="Test_*" class="ActionTest" method="{1}">
+			<result name="pageTest">/WEB-INF/jsp/productList.jsp</result>
+			<result name="login">/WEB-INF/jsp/login.jsp</result>
+			<result name="regist">/WEB-INF/jsp/regist.jsp</result>
+		</action>
+		<!-- 用户模块登陆action -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="loginPage">/WEB-INF/jsp/login.jsp</result>
+			<result name="input">/WEB-INF/jsp/login.jsp</result>
+			<result name="loginfail">/WEB-INF/jsp/login.jsp</result>
+			<result name="loginsuccess" type="redirectAction">index</result>
+			<result name="quit">/WEB-INF/jsp/login.jsp</result>
+			<result name="myqtao">/WEB-INF/jsp/myQtao.jsp</result>
+			<result name="updateUser">/WEB-INF/jsp/myQtao.jsp</result>
+			<result name="findpassword">/WEB-INF/jsp/findpassword.jsp</result>
+			<result name="resetpassword">/WEB-INF/jsp/resetpassword.jsp</result>
+		</action>
+		<!-- 用户注册action -->
+		<action name="usert_*" class="userAction" method="{1}">
+			<result name="registPage">/WEB-INF/jsp/regist.jsp</result>
+			 <result name="input">/WEB-INF/jsp/regist.jsp</result> 
+		</action>
+		
+		<!-- product模块action -->
+		<action name="product_*" class="productAction" method="{1}">
+			<result name="findByPid">/WEB-INF/jsp/product_details.jsp</result>
+			<result name="findByCsid">/WEB-INF/jsp/productSecondList.jsp</result>
+			<result name="findByCid">/WEB-INF/jsp/productList.jsp</result>
+			<result name="findByCtid">/WEB-INF/jsp/productThirdList.jsp</result>
+			<result name="ToPage">/WEB-INF/jsp/404.jsp</result>
+			<result name="SearchKeyWord" >/WEB-INF/jsp/searchproducts.jsp</result>
+		</action>
+		
+		<!-- 购物车模块 -->
+		 <action name="cart_*" class="cartAction" method="{1}">
+		 	<interceptor-ref name="tokenSession" />
+			<interceptor-ref name="defaultStack" /> 
+			<result name="addcart">/WEB-INF/jsp/cart.jsp</result>
+		</action>  
+		<action name="cartt_*" class="cartAction" method="{1}">
+			<result name="mycart">/WEB-INF/jsp/cart.jsp</result>
+			<result name="delete">/WEB-INF/jsp/cart.jsp</result>
+			<result name="clearcart">/WEB-INF/jsp/cart.jsp</result>
+			<result name="indexAddCart">/WEB-INF/jsp/cart.jsp</result>
+		</action>
+		<!-- 订单模块 -->
+		<action name="order_*" class="orderAction" method="{1}">
+			<result name="submit" >/WEB-INF/jsp/payorder.jsp</result>
+			<result name="delete" type="redirectAction">order_findAll</result>
+			<result name="findAll">/WEB-INF/jsp/myorders.jsp</result>
+			<result name="deleteItem" >/WEB-INF/jsp/payorder.jsp</result>
+			<result name="gotoPay" >/WEB-INF/jsp/payorder.jsp</result>
+			<result name="mss" >/WEB-INF/jsp/msg.jsp</result>
+			<result name="toComment" >/WEB-INF/jsp/comment.jsp</result>
+		</action>
+		<action name="orderr_*" class="orderAction" method="{1}">
+			<interceptor-ref name="tokenSession" />
+			<interceptor-ref name="defaultStack" /> 
+			<result name="bey">/WEB-INF/jsp/payorder.jsp</result>
+		</action>
+		<!-- 后台管理员模块 -->
+		<action name="admin_*" class="adminUserAction" method="{1}">
+			<result name="loginFail">/WEB-INF/admin/adminLogin.jsp</result>
+			<result name="loginSuccess" type="redirectAction">admin_index</result>
+			<result name="index">/WEB-INF/admin/adminIndex.jsp</result>
+			<result name="quit">/WEB-INF/admin/adminLogin.jsp</result>
+			<result name="loginPage">/WEB-INF/admin/adminLogin.jsp</result>
+			<result name="findAdmins">/WEB-INF/admin/adminuser/adminUserList.jsp</result>
+			<result name="toAdd">/WEB-INF/admin/adminuser/adminUserAdd.jsp</result>
+			<result name="success" type="redirectAction">admin_findAdmins</result>
+			<result name="edit" >/WEB-INF/admin/adminuser/adminUseredit.jsp</result>
+			
+		</action>
+		<!-- 用户管理 -->
+		<action name="adminUser_*" class="UserAdminAction" method="{1}">
+			<result name="findAll">/WEB-INF/admin/user/userlist.jsp</result>
+			<result name="userdefriend">/WEB-INF/admin/user/userdefriend.jsp</result>
+			<result name="Success" type="redirectAction">adminUser_findAll</result>
+		</action>
+		<!-- 一级分类管理 -->
+		<action name="AdminCategory_*" class="AdminCategoryAction" method="{1}">
+			<result name="findAll">/WEB-INF/admin/category/categorylist.jsp</result>
+			<result name="edit">/WEB-INF/admin/category/categoryedit.jsp</result>
+			<result name="edited" type="redirectAction">AdminCategory_findAll</result>
+			<result name="delete" type="redirectAction">AdminCategory_findAll</result>
+			<result name="toadd" >/WEB-INF/admin/category/categoryadd.jsp</result>
+			<result name="add" type="redirectAction">AdminCategory_findAll</result>
+		</action>
+		
+		<!-- 二级分类管理 -->
+		<action name="AdminCS_*" class="AdminCSAction" method="{1}">
+			<result name="findAll">/WEB-INF/admin/categorysecond/categorysecondlist.jsp</result>
+			<result name="edit">/WEB-INF/admin/categorysecond/categorysecondedit.jsp</result>
+			<result name="toAdd">/WEB-INF/admin/categorysecond/categorysecondadd.jsp</result>
+			<result name="input">/WEB-INF/admin/categorysecond/list.jsp</result>
+			<result name="edited" type="redirectAction">AdminCS_findAll</result> 
+			<result name="success" type="redirectAction">AdminCS_findAll</result> 
+			
+		</action>
+		<!-- 三级菜单管理 -->
+		<action name="AdminCT_*" class="categoryThirdAction" method="{1}">
+			<result name="findAll" >/WEB-INF/admin/categorythird/categorythirdlist.jsp</result>
+			<result name="toAdd" >/WEB-INF/admin/categorythird/categorythirdadd.jsp</result>
+			<result name="edit" >/WEB-INF/admin/categorythird/categorythirdedit.jsp</result>
+			<result name="success" type="redirectAction">AdminCT_findAll</result>
+		</action>
+		<!-- 商品管理 -->
+		<action name="AdminProduct_*" class="AdminProduct" method="{1}">
+			<result name="findAll">/WEB-INF/admin/product/productlist.jsp</result>
+			<result name="edit">/WEB-INF/admin/product/productedit.jsp</result>
+			<result name="success" type="redirectAction">AdminProduct_findAll</result>
+			<result name="toadd" >/WEB-INF/admin/product/productadd.jsp</result>
+			<result name="SearchWord" >/WEB-INF/admin/product/searchlist.jsp</result>
+		</action>
+		<!-- 订单管理 -->
+		<action name="AdminOrder_*" class="AdminOrder" method="{1}">
+			<result name="findAll">/WEB-INF/admin/orders/orderlist.jsp</result>
+			<!-- <result name="delete" type="redirectAction">AdminOrder_findAll</result> -->
+			<result name="send" type="redirectAction">AdminOrder_findAll</result>
+			<result name="list1">/WEB-INF/admin/orders/orderlist1.jsp</result>
+			<result name="list2">/WEB-INF/admin/orders/orderlist2.jsp</result>
+			<result name="list3">/WEB-INF/admin/orders/orderlist3.jsp</result>
+			<result name="list4">/WEB-INF/admin/orders/orderlist4.jsp</result>
+			<!-- 销售报表 -->
+			<result name="month">/WEB-INF/admin/sale/month.jsp</result>
+			<result name="quater">/WEB-INF/admin/sale/quarter.jsp</result>
+			<result name="year">/WEB-INF/admin/sale/year.jsp</result>
+		</action>
+		<!-- 我的收藏 -->
+		<action name="favorites_*" class="favoritesAction" method="{1}">
+			<result name="myfavorites">/WEB-INF/jsp/myfavorites.jsp</result>
+			<result name="delete" type="redirectAction">favorites_MyFavorites.action</result>
+		</action>
+		<!-- 我的头像 -->
+		<action name="portrait_*" class="portraitAction" method="{1}">
+			<result name="upload" >/WEB-INF/jsp/myportrait.jsp</result>
+			<result name="myportrait">/WEB-INF/jsp/myportrait.jsp</result>
+		</action>
+		<!-- 我的收货地址 -->
+		<action name="address_*" class="addressAction" method="{1}">
+			<result name="myAddr" >/WEB-INF/jsp/myaddr.jsp</result>
+			<result name="addAddress" >/WEB-INF/jsp/addAddress.jsp</result>
+			<result name="toUpdate" >/WEB-INF/jsp/updateAddress.jsp</result>
+			<result name="add" type="redirectAction">address_myAddr.action</result>
+			<result name="delete" type="redirectAction">address_myAddr.action</result>
+			<result name="update" type="redirectAction">address_myAddr.action</result>
+			<result name="deleteAll" type="redirectAction">address_myAddr.action</result>
+		</action>
+		<!-- 验证码action -->
+		<action name="checkImg" class="checkImgAction" />
+		<!-- 测试类 -->
+<!-- 		<action name="HTest_*" class="HibernateTest" method="{1}">
+		</action> -->
+	</package>	
+</struts>

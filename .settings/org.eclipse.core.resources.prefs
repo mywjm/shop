@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//WebRoot/WEB-INF/admin/adminTop.jsp=UTF-8
+encoding//WebRoot/WEB-INF/admin/sale/month.jsp=UTF-8
+encoding//WebRoot/WEB-INF/admin/sale/quarter.jsp=UTF-8
+encoding//WebRoot/WEB-INF/admin/sale/year.jsp=UTF-8
+encoding//WebRoot/WEB-INF/jsp/top.jsp=UTF-8
+encoding//WebRoot/index.jsp=UTF-8
+encoding//WebRoot/js/regist.js=UTF-8
+encoding//src/cn/itcast/shop/product/action/ProductAction.java=UTF-8
+encoding//src/cn/itcast/shop/utils/PageBean.java=UTF-8

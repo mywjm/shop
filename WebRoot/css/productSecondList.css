@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+.thirdcategory{
+	background-color: #FFEFD5 ;
+
+}
+.thirdcategory div{
+	padding:0 25px;
+}
+.thirdcategory ul li a{
+	margin: 0 10px;
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<class name="cn.itcast.shop.product.domain.Product" table="product">
+		<id name="pid">
+			<generator class="native"/>
+		</id>
+		<property name="pname"/>
+		<property name="market_price"/>
+		<property name="shop_price"/>
+		<property name="image"/>
+		<property name="pdesc"/>
+		<property name="is_hot"/>
+		<property name="pdate"/>
+		<!-- 多个产品在一个三级菜单 -->
+		<many-to-one name="categoryThird" lazy="false" class="cn.itcast.shop.categorythird.domain.CategoryThird" column="ctid"/>
+		<!-- 多个产品在一个订单选项 -->
+		<set name="orderItems" lazy="true" cascade="delete">
+			<key column="pid"/>
+			<one-to-many class="cn.itcast.shop.order.domain.OrderItem"/>
+		</set>
+		<!-- 多个产品可以在一个收藏夹中 -->
+		<set name="favorites" lazy="true" cascade="delete">
+			<key column="pid"/>
+			<one-to-many class="cn.itcast.shop.user.domain.Favorites"/>
+		</set>
+		
+		<!-- 一个产品对应多条评论 -->
+		<set name="comments" lazy="true" cascade="delete">
+			<key column="pid"/>
+			<one-to-many class="cn.itcast.shop.order.domain.Comment" />
+		</set>
+	</class>
+	
+		
+
+</hibernate-mapping>

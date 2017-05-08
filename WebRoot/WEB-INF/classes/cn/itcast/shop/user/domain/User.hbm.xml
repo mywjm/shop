@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="cn.itcast.shop.user.domain.User" table="user" >
+		<id name="uid">
+			<generator class="native"/>
+		</id>
+		<property name="nickname"/>
+		<property name="email"/>
+		<property name="password"/>
+		<property name="name"/>
+		<property name="gender"/>
+		<property name="birthday"/>
+		<property name="residence"/>
+		<property name="portrait"/>
+		<property name="state"/>
+		<property name="code"/>
+		<!-- 一个用户对应多个订单 -->
+		<set name="orders" lazy="false" cascade="save-update">
+			<key column="uid"/>
+		<one-to-many class="cn.itcast.shop.order.domain.Order"/>
+		</set>
+		<!-- 一个用户对应多个收货地址 -->
+		<set name="address" lazy="false" cascade="save-update">
+			<key column="uid"/>
+		<one-to-many class="cn.itcast.shop.user.domain.Address"/>
+		</set>
+		<!-- 一个用户可以有多个收藏 -->
+		<set name="favorites" lazy="false" cascade="save-update">
+			<key column="uid"/>
+			<one-to-many class="cn.itcast.shop.user.domain.Favorites"/>
+		</set>
+	</class>
+</hibernate-mapping>

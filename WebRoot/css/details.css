@@ -1,0 +1,73 @@
+@CHARSET "UTF-8";
+.detailright{
+	width: 120px;
+	height: 120px;
+	clear: both;
+	display: block;
+	margin: auto;
+	}
+.imgbox{
+	width: 60px;
+	height: 60px;
+	
+}
+.tablecontainer{
+	margin: 40px;
+	
+}
+.total{
+	padding: 10px 0px;
+	/* margin-bottom: 10px; */
+	text-align: right;
+	
+}
+.total em {
+	margin-right: 14px;
+	color: #ff6600;
+	font-style: normal;
+}
+.total strong {
+	color: #ef0101;
+	font-size: 14px;
+}
+.bottom {
+	height: 38px;
+	line-height: 30px;
+	margin-bottom: 10px;
+	text-align: right;
+	overflow: hidden;
+	border: 1px dotted #e4e4e4;
+	background-color: #FFFAF0;
+}
+.bottom a:HOVER{
+	background-color: #FF8C00;
+}
+.button{
+	text-align: center;
+	padding:  5px 25px;
+	color: #ffffff;
+	background-color: #b31d04;
+}
+.pname{
+	font-family: "Raleway",sans-serif;
+	color: #444444;
+}
+.carttitle{
+	padding: 10px 47%;
+	background-color: #FFFAFA ;
+	
+}
+.ordercolor{
+	color: #FFFFFF;
+	background-color: #FF0000;
+	
+}
+.ordercolor a{
+	font-family: "Raleway",sans-serif;
+	color: #FFFFFF;
+}
+.optionclass{
+	font-family: "Raleway",sans-serif;
+	color: #444444;
+}
+

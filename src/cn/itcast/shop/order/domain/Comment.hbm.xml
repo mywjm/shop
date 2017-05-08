@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="cn.itcast.shop.order.domain.Comment" table="comment">
+		<id name="comid">
+			<generator class="native"/>
+		</id>
+		<property name="matcher"/>
+		<property name="customer_service"/>
+		<property name="express_service"/>
+		<property name="content"/>
+		<many-to-one name="order" class="cn.itcast.shop.order.domain.Order" lazy="false" column="oid" unique="true"/>
+		<many-to-one name="product" class="cn.itcast.shop.product.domain.Product" lazy="false" column="pid"/>
+	</class>
+</hibernate-mapping>

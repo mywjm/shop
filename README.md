@@ -2,10 +2,10 @@
 SSH网上商城实战1.0
 
 阿里云服务器展示地址：
-前台：http://www.mywjm.site:8080/ssh/index 
+前台：//失效http://www.mywjm.site:8080/ssh/index 
 测试账号：小陈    密码：123456
 
-后台：http://www.mywjm.site:8080/ssh/admin_loginPage 
+后台：//失效http://www.mywjm.site:8080/ssh/admin_loginPage 
 测试账号：admin   密码：admin
 
 遵循Java EE应用软件分层的模型，将系统划分为三个层次，持久层、业务逻辑层和表示层，并且整合了目前企业 开发中最流行的开源
